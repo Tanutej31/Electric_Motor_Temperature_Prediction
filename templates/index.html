@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Electric Motor Temperature Prediction</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 20px;
+            width: 520px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        img {
+            width: 200px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            margin-top: 15px;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #ff416c;
+        }
+
+        .result {
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .safe {
+            color: #00ff88;
+        }
+
+        .warning {
+            color: yellow;
+        }
+
+        .critical {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Electric Motor Temperature Prediction</h1>
+
+    <!-- Motor Image -->
+    <img src="{{ url_for('static', filename='images/motor.png') }}" alt="Motor">
+
+    <form action="/predict" method="post">
+
+        <input type="text" name="u_q" placeholder="u_q">
+        <input type="text" name="coolant" placeholder="coolant">
+        <input type="text" name="stator_winding" placeholder="stator_winding">
+        <input type="text" name="u_d" placeholder="u_d">
+        <input type="text" name="stator_tooth" placeholder="stator_tooth">
+        <input type="text" name="motor_speed" placeholder="motor_speed">
+        <input type="text" name="i_d" placeholder="i_d">
+        <input type="text" name="i_q" placeholder="i_q">
+        <input type="text" name="stator_yoke" placeholder="stator_yoke">
+        <input type="text" name="ambient" placeholder="ambient">
+
+        <input type="submit" value="Predict Temperature">
+    </form>
+
+    {% if prediction_text %}
+        <div class="result">
+            Predicted Temperature: {{ prediction_text }} °C <br><br>
+
+            {% if status == "Safe" %}
+                <span class="safe">Status: Safe ✅</span>
+            {% elif status == "Warning" %}
+                <span class="warning">Status: Warning ⚠️</span>
+            {% else %}
+                <span class="critical">Status: Critical 🔥</span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
